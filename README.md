@@ -19,6 +19,7 @@ Perfect for educational robotics projects with kids!
 
 - **Mecanum Wheel Control**: 10 directional movements (forward, backward, strafe left/right, rotate CW/CCW, 4 diagonal directions)
 - **DC Motor Control**: Individual control of 4 DC motors (M1-M4) with configurable directions
+- **Simulator Support**: Visual feedback in MakeCode simulator for testing before deployment
 - **Configurable**: Runtime configuration for motor directions and brake strength
 - **Kid-Friendly**: Natural language blocks in English, German, and Chinese
 - **Hardware Optimized**: Handles HR8833 chip quirks automatically
