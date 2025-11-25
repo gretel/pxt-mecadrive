@@ -2,7 +2,7 @@
  * @file pxt-motor/main.ts
  * @brief DFRobot's microbit motor drive makecode library.
  * @n [Get the module here](http://www.dfrobot.com.cn/goods-1577.html)
- * @n This is the microbit motor drive library for DC motors, servos, and mecanum wheels.
+ * @n This is the microbit motor drive library for DC motors and mecanum wheels.
  *
  * @copyright	[DFRobot](http://www.dfrobot.com), 2016
  * @copyright	GNU Lesser General Public License
@@ -31,7 +31,7 @@
  */
 
 /**
- * MecaDrive - Motor driver for DC motors, servos, and mecanum wheels
+ * MecaDrive - Motor driver for DC motors and mecanum wheels
  */
 //% weight=10 color=#DF6721 icon="\uf013" block="MecaDrive"
 namespace motor {
@@ -50,20 +50,6 @@ namespace motor {
     const ALL_LED_ON_H = 0xFB
     const ALL_LED_OFF_L = 0xFC
     const ALL_LED_OFF_H = 0xFD
-
-    /**
-     * The user can select the 8 servo controller.
-     */
-    export enum Servos {
-        S1 = 0x08,
-        S2 = 0x07,
-        S3 = 0x06,
-        S4 = 0x05,
-        S5 = 0x04,
-        S6 = 0x03,
-        S7 = 0x02,
-        S8 = 0x01
-    }
 
     /**
      * The user selects the 4-way dc motor.
@@ -212,26 +198,6 @@ namespace motor {
     //% group="Advanced"
     export function configBrakeStrength(level: number): void {
         brakePwmLevel = Math.max(0, Math.min(4095, level))
-    }
-
-    /**
-     * Control a servo motor from 0° to 180°
-     * @param index servo S1-S8
-     * @param degree angle 0-180
-	*/
-    //% blockId=motor_servo block="Servo|%index|degree|%degree"
-    //% weight=30
-    //% degree.min=0 degree.max=180
-    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
-    //% group="Servos"
-    export function servo(index: Servos, degree: number): void {
-        if (!initialized) {
-            initPCA9685()
-        }
-        // 50hz
-        let v_us = (degree * 1800 / 180 + 600) // 0.6ms ~ 2.4ms
-        let value = v_us * 4096 / 20000
-        setPwm(index + 7, 0, value)
     }
 
     /**
