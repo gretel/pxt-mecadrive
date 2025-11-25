@@ -442,6 +442,132 @@ namespace motor {
     }
 
     /**
+     * Move the mecanum wheel chassis in any direction using heading (0-360 degrees)
+     * This block allows smooth directional control with variables
+     * @param heading direction in degrees: 0=Forward, 90=Right, 180=Backward, 270=Left
+     * @param speed movement speed 0-255
+     */
+    //% weight=95
+    //% blockId=mecanum_move_heading block="Move at heading|%heading|degrees with speed|%speed"
+    //% speed.min=0 speed.max=255 speed.defl=100
+    //% heading.min=0 heading.max=360 heading.defl=0
+    //% group="Mecanum Movement"
+    export function mecanumMoveByHeading(heading: number, speed: number = 100): void {
+        if (!initialized) {
+            initPCA9685()
+        }
+
+        // Clamp inputs
+        speed = Math.max(0, Math.min(255, speed))
+        heading = heading % 360  // Wrap around 360
+        if (heading < 0) heading += 360
+
+        let pwmSpeed = Math.round((speed * 4095) / 255)
+
+        // Convert heading to radians (0° = forward, 90° = right, 180° = back, 270° = left)
+        let radians = (heading * Math.PI) / 180
+
+        // Calculate velocity components
+        // Vx = left/right component (positive = right)
+        // Vy = forward/back component (positive = forward)
+        let Vx = Math.sin(radians)
+        let Vy = Math.cos(radians)
+
+        // Calculate motor speeds for mecanum wheels
+        // M1 and M4 are one diagonal, M2 and M3 are the other
+        let m1Speed = Vy - Vx  // Front-Right diagonal
+        let m2Speed = Vy + Vx  // Rear-Right diagonal
+        let m3Speed = Vy + Vx  // Front-Left diagonal (same as M2)
+        let m4Speed = Vy - Vx  // Rear-Left diagonal (same as M1)
+
+        // Find max absolute value for normalization
+        let maxSpeed = Math.max(
+            Math.abs(m1Speed),
+            Math.abs(m2Speed),
+            Math.abs(m3Speed),
+            Math.abs(m4Speed)
+        )
+
+        // Normalize and scale to PWM range
+        if (maxSpeed > 0) {
+            m1Speed = (m1Speed / maxSpeed) * pwmSpeed
+            m2Speed = (m2Speed / maxSpeed) * pwmSpeed
+            m3Speed = (m3Speed / maxSpeed) * pwmSpeed
+            m4Speed = (m4Speed / maxSpeed) * pwmSpeed
+        }
+
+        // Helper functions from mecanumMove
+        function setM1M2(motor: number, dir: number, pwm: number) {
+            // Apply reversal if configured
+            if (motor == 1 && reverseM1) dir = -dir
+            if (motor == 2 && reverseM2) dir = -dir
+
+            if (motor == 1) {
+                if (dir > 0) {
+                    setPwm(7, 0, pwm)
+                    setPwm(6, 0, 0)
+                } else if (dir < 0) {
+                    setPwm(7, 0, 0)
+                    setPwm(6, 0, pwm)
+                } else {
+                    setPwm(7, 0, 0)
+                    setPwm(6, 0, 0)
+                }
+            } else {
+                if (dir > 0) {
+                    setPwm(5, 0, pwm)
+                    setPwm(4, 0, 0)
+                } else if (dir < 0) {
+                    setPwm(5, 0, 0)
+                    setPwm(4, 0, pwm)
+                } else {
+                    setPwm(5, 0, 0)
+                    setPwm(4, 0, 0)
+                }
+            }
+        }
+
+        function setU2Motors(m3Dir: number, m4Dir: number, pwm: number) {
+            // Apply reversal if configured
+            if (reverseM3) m3Dir = -m3Dir
+            if (reverseM4) m4Dir = -m4Dir
+
+            if (m3Dir > 0) {
+                setPwm(3, 0, 0)
+                setPwm(2, 0, pwm)
+            } else if (m3Dir < 0) {
+                setPwm(3, 0, pwm)
+                setPwm(2, 0, 0)
+            } else {
+                setPwm(3, 0, brakePwmLevel)
+                setPwm(2, 0, brakePwmLevel)
+            }
+
+            if (m4Dir > 0) {
+                setPwm(1, 0, 0)
+                setPwm(0, 0, pwm)
+            } else if (m4Dir < 0) {
+                setPwm(1, 0, pwm)
+                setPwm(0, 0, 0)
+            } else {
+                setPwm(1, 0, brakePwmLevel)
+                setPwm(0, 0, brakePwmLevel)
+            }
+        }
+
+        // Apply motor speeds with direction
+        setM1M2(1, m1Speed > 0 ? 1 : m1Speed < 0 ? -1 : 0, Math.abs(m1Speed))
+        setM1M2(2, m2Speed > 0 ? 1 : m2Speed < 0 ? -1 : 0, Math.abs(m2Speed))
+
+        // For M3/M4, we need to handle the U2 chip limitation
+        // Check if both motors can run (same direction or one stopped)
+        let m3Dir = m3Speed > 0 ? -1 : m3Speed < 0 ? 1 : 0  // Reversed mounting
+        let m4Dir = m4Speed > 0 ? -1 : m4Speed < 0 ? 1 : 0  // Reversed mounting
+
+        setU2Motors(m3Dir, m4Dir, Math.max(Math.abs(m3Speed), Math.abs(m4Speed)))
+    }
+
+    /**
      * Stop an individual motor. Note: Stopping M3 or M4 stops both motors
      * @param index motor M1-M4 to stop
     */

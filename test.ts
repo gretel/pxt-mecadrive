@@ -57,5 +57,31 @@ basic.pause(1000)
 motor.mecanumMove(motor.MecanumDirection.Forward, 255)
 basic.pause(1000)
 
+// Test 7: Heading-based control - cardinal directions
+motor.mecanumMoveByHeading(0, 100)    // Forward
+basic.pause(1000)
+motor.mecanumMoveByHeading(90, 100)   // Right
+basic.pause(1000)
+motor.mecanumMoveByHeading(180, 100)  // Backward
+basic.pause(1000)
+motor.mecanumMoveByHeading(270, 100)  // Left
+basic.pause(1000)
+
+// Test 8: Heading-based control - diagonal movements
+motor.mecanumMoveByHeading(45, 100)   // Northeast
+basic.pause(1000)
+motor.mecanumMoveByHeading(135, 100)  // Southeast
+basic.pause(1000)
+motor.mecanumMoveByHeading(225, 100)  // Southwest
+basic.pause(1000)
+motor.mecanumMoveByHeading(315, 100)  // Northwest
+basic.pause(1000)
+
+// Test 9: Smooth circular pattern
+for (let heading = 0; heading <= 360; heading += 30) {
+    motor.mecanumMoveByHeading(heading, 120)
+    basic.pause(500)
+}
+
 // Test complete - stop all motors
 motor.motorStopAll()
