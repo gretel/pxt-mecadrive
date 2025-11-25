@@ -19,6 +19,8 @@
     "motor.MotorRun|jsdoc": "控制单个直流电机，速度可调（0-255）",
     "motor.mecanumMove|block": "移动 %direction 速度 %speed",
     "motor.mecanumMove|jsdoc": "控制麦克纳姆轮底盘朝指定方向移动，速度可调（0-255）",
+    "motor.mecanumMoveByHeading|block": "按航向角 %heading 度移动 速度 %speed",
+    "motor.mecanumMoveByHeading|jsdoc": "使用航向角（0-360度）控制麦克纳姆轮底盘。0度=前进，90度=右移，180度=后退，270度=左移",
     "motor.motorStop|block": "停止电机 %index",
     "motor.motorStop|jsdoc": "停止单个电机。注意：停止M3或M4会同时停止两个电机",
     "motor.motorStopAll|block": "停止所有电机",

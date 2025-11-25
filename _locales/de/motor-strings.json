@@ -19,6 +19,8 @@
     "motor.MotorRun|jsdoc": "Steuere einen einzelnen DC-Motor mit einstellbarer Geschwindigkeit (0-255)",
     "motor.mecanumMove|block": "Fahre %direction mit Tempo %speed",
     "motor.mecanumMove|jsdoc": "Bewege das Mecanum-Rad-Chassis in eine Richtung mit einstellbarer Geschwindigkeit (0-255)",
+    "motor.mecanumMoveByHeading|block": "Fahre auf Kurs %heading Grad mit Tempo %speed",
+    "motor.mecanumMoveByHeading|jsdoc": "Bewege das Mecanum-Rad-Chassis mit Kurswinkel (0-360 Grad). 0°=vorwärts, 90°=rechts, 180°=rückwärts, 270°=links",
     "motor.motorStop|block": "Stoppe Motor %index",
     "motor.motorStop|jsdoc": "Stoppe einen einzelnen Motor. Hinweis: M3 oder M4 stoppen stoppt beide Motoren",
     "motor.motorStopAll|block": "Stoppe alle Motoren",

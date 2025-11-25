@@ -18,6 +18,7 @@ Perfect for educational robotics projects with kids!
 ## Features
 
 - **Mecanum Wheel Control**: 10 directional movements (forward, backward, strafe left/right, rotate CW/CCW, 4 diagonal directions)
+- **Heading-Based Control**: Move in any direction using compass heading (0-360°) - perfect for navigation, tracking, and smooth directional control
 - **DC Motor Control**: Individual control of 4 DC motors (M1-M4) with configurable directions
 - **Simulator Support**: Visual feedback in MakeCode simulator for testing before deployment
 - **Configurable**: Runtime configuration for motor directions and brake strength
@@ -28,10 +29,14 @@ Perfect for educational robotics projects with kids!
 
 ### 1. Mecanum Movement
 Control omnidirectional movement with mecanum wheels:
-- Move Forward/Backward
-- Strafe Left/Right
-- Rotate CW/CCW
-- Diagonal movements (4 directions)
+- **Named Directions**: Use dropdown to select Forward, Backward, Strafe Left/Right, Rotate CW/CCW, Diagonal (4 directions)
+- **Heading Control**: Use compass heading (0-360 degrees) for smooth directional control
+  - 0° = Forward (North)
+  - 90° = Strafe Right (East)
+  - 180° = Backward (South)
+  - 270° = Strafe Left (West)
+  - 45°, 135°, 225°, 315° = Diagonal movements
+  - Any angle for smooth omnidirectional movement
 - Variable speed (0-255)
 
 ### 2. DC Motor Control
