@@ -482,10 +482,8 @@ namespace motor {
 
         // Find max absolute value for normalization
         let maxSpeed = Math.max(
-            Math.abs(m1Speed),
-            Math.abs(m2Speed),
-            Math.abs(m3Speed),
-            Math.abs(m4Speed)
+            Math.max(Math.abs(m1Speed), Math.abs(m2Speed)),
+            Math.max(Math.abs(m3Speed), Math.abs(m4Speed))
         )
 
         // Normalize and scale to PWM range
